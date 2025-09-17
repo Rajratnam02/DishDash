@@ -27,7 +27,7 @@ const FoodPage = () => {
           {foodData && (
               <div className='mt-5'>
                   <h1 className='text-[3rem] playfair-display-semibold text-center'>{foodData.strMeal}</h1>
-                  <p className='text-lg playfair-display-light text-center mt-5 '>Home > {foodData.strCategory} > {foodData.strMeal} </p>
+                  <p className='text-lg playfair-display-light text-center mt-5 '>Home &gt; {foodData.strCategory} &lt; {foodData.strMeal} </p>
 
                   <div className='flex flex-wrap justify-center px-50 gap-7 py-10 min-h-screen '>
                         <FoodPageHero foodData={foodData} />
