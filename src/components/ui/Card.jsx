@@ -10,19 +10,18 @@ const Card = ({ name }) => {
   };
 
   return (
-    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center w-full border-b py-3 gap-2">
-   
-      <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold break-words">
+    <div 
+      onClick={onViewMore}
+      className="group cursor-pointer bg-white border border-gray-100 rounded-2xl p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col items-center justify-center text-center gap-4"
+    >
+      <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-800 group-hover:text-orange-600 transition-colors break-words">
         {name}
-      </h1>
-
-    
-      <button
-        onClick={onViewMore}
-        className="hover:text-blue-600 playfair-display-normal text-sm sm:text-base md:text-lg font-medium hover:underline"
-      >
-        View More →
-      </button>
+      </h3>
+      
+      <div className="flex items-center gap-1 text-orange-500 font-medium text-sm sm:text-base opacity-0 group-hover:opacity-100 transition-opacity">
+        <span>View More</span>
+        <span className="group-hover:translate-x-1 transition-transform">→</span>
+      </div>
     </div>
   );
 };

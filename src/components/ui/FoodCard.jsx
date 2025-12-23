@@ -2,7 +2,6 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
 const FoodCard = (props) => {
-
   const navigate = useNavigate();
 
   const clickHandler = (e) => {
@@ -10,23 +9,38 @@ const FoodCard = (props) => {
     navigate(`/food?foodID=${props.meal.idMeal}`)
   }
 
-
-
   return (
-    <div class="flex w-[250px]  flex-wrap items-center mb-5 justify-center gap-4">
-    <div class="bg-white w-full items-center flex flex-col rounded-2xl pb-4 hover:scale-110 transition-all duration-400 hover:shadow-[0px_0px_5px_5px_rgba(0,0,0,0.2)] overflow-hidden border border-gray-500/30">
-        <img class="w-64 h-52 object-cover object-top" src={props.meal.strMealThumb} alt="userImage2" />
-        <div class="flex flex-col w-full items-center">
-                  <p class="font-medium w-full truncate text-center mt-3">{props.meal.strMeal}</p>
-                  <p class="text-gray-500 w-full text-center text-sm">{props.meal.strArea}</p>
-            <button onClick={clickHandler} class="border cursor-pointer   text-sm bg-gradient-to-b from-blue-500 via-blue-600 to-blue-700 text-white font-medium border-gray-500/30 w-28 h-8 rounded-full mt-5">
-                <p class="mb-1">View More</p>
-            </button>
+    <div className="w-full group">
+      <div className="bg-white flex flex-col items-center rounded-2xl pb-6 transition-all duration-300 hover:shadow-2xl overflow-hidden border border-gray-100 h-full">
+        <div className="relative w-full h-48 sm:h-56 overflow-hidden">
+          <img 
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
+            src={props.meal.strMealThumb} 
+            alt={props.meal.strMeal} 
+          />
+          <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full shadow-sm">
+             <p className="text-xs font-bold text-gray-700 uppercase tracking-wider">{props.meal.strArea}</p>
+          </div>
         </div>
+
+        <div className="flex flex-col w-full items-center px-4">
+          <h3 className="font-bold text-lg text-gray-800 w-full truncate text-center mt-4">
+            {props.meal.strMeal}
+          </h3>
+          
+          <p className="text-gray-500 text-sm mt-1 italic">
+            Category: {props.meal.strCategory}
+          </p>
+
+          <button 
+            onClick={clickHandler} 
+            className="mt-6 w-full py-2.5 bg-orange-500 hover:bg-orange-600 text-white rounded-xl font-semibold text-sm transition-colors duration-200 shadow-md hover:shadow-orange-200"
+          >
+            View Recipe
+          </button>
+        </div>
+      </div>
     </div>
-
-
-</div>
   )
 }
 

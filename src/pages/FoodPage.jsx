@@ -8,36 +8,54 @@ const FoodPage = () => {
     const [searchParams] = useSearchParams()
     const foodId = searchParams.get("foodID")
     const [foodData, setFoodData] = useState(null);
+    const [loading, setLoading] = useState(true);
+
     useEffect(() => {
         const fetchFoodById = async () => {
             try {
+                setLoading(true);
                 const response = await axios.get(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${foodId}`);
-                await setFoodData(response.data.meals[0]);
+                setFoodData(response.data.meals[0]);
+                setLoading(false);
             } catch (error) {
                 console.error("Error Fetching Data", error);
+                setLoading(false);
             }
         }
 
-        fetchFoodById();
-    },[])
-
+        if (foodId) fetchFoodById();
+    }, [foodId])
 
   return (
-      <div className='min-h-screen px-5'>
-          {foodData && (
-              <div className='mt-5'>
-                  <h1 className='text-[3rem] playfair-display-semibold text-center'>{foodData.strMeal}</h1>
-                  <p className='text-lg playfair-display-light text-center mt-5 '>Home &gt; {foodData.strCategory} &lt; {foodData.strMeal} </p>
+      <div className='min-h-screen px-4 sm:px-6 lg:px-12 py-6'>
+          {loading ? (
+              <div className="flex justify-center items-center h-64">
+                  <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange-500"></div>
+              </div>
+          ) : foodData && (
+              <div className='max-w-7xl mx-auto'>
+                  {/* Breadcrumbs */}
+                  <nav className='flex justify-center mb-4'>
+                      <p className='text-xs sm:text-sm md:text-base playfair-display-light text-gray-500 text-center uppercase tracking-wide'>
+                          Home <span className="mx-2 text-orange-500">/</span> {foodData.strCategory} <span className="mx-2 text-orange-500">/</span> {foodData.strMeal}
+                      </p>
+                  </nav>
 
-                  <div className='flex flex-wrap justify-center px-50 gap-7 py-10 min-h-screen '>
-                        <FoodPageHero foodData={foodData} />
+                  {/* Title */}
+                  <h1 className='text-3xl sm:text-4xl md:text-5xl lg:text-6xl playfair-display-semibold text-center mb-10 text-gray-900 leading-tight'>
+                      {foodData.strMeal}
+                  </h1>
+
+                  {/* Layout Container */}
+                  <div className='flex flex-col lg:flex-row items-start justify-center gap-10 lg:gap-16'>
+                        <div className="w-full lg:w-1/3 sticky lg:top-10">
+                            <FoodPageHero foodData={foodData} />
+                        </div>
                      
-                     
-                        <FoodPageMain foodData={foodData} />
-
-
+                        <div className="w-full lg:w-2/3">
+                            <FoodPageMain foodData={foodData} />
+                        </div>
                   </div>
-
               </div>
           )}
     </div>

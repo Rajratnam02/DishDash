@@ -12,11 +12,11 @@ const SectionThree = () => {
         const response = await axios.get(
           "https://www.themealdb.com/api/json/v1/1/random.php"
         );
-        setFoodDetails(response.data.meals); // meals is an array
-        console.log(response.data.meals);
+        setFoodDetails(response.data.meals);
         setLoading(false);
       } catch (error) {
         console.error("Error Fetching Food", error);
+        setLoading(false);
       }
     };
 
@@ -24,24 +24,27 @@ const SectionThree = () => {
   }, []);
 
   return (
-    <div className="flex mt-5 py-5 flex-col items-center px-4 sm:px-6 md:px-10 lg:px-16">
-      {/* Responsive Heading */}
-      <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl lora-normal text-center mb-6">
-        Our Quick Picks for You
-      </h1>
-
-      {/* Loading State */}
-      {loading && (
-        <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl cookie-light text-center">
-          Loading...
+    <div className="w-full mt-10 py-10 flex flex-col items-center px-4 sm:px-6 lg:px-12 bg-gray-50/50">
+      <div className="max-w-7xl w-full flex flex-col items-center">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold lora-normal text-center mb-4 text-gray-900">
+          Our Quick Pick for You
         </h1>
-      )}
+        <div className="w-24 h-1 bg-orange-500 rounded-full mb-10"></div>
 
-      {/* Responsive Food Cards */}
-      <div className="flex flex-wrap gap-6 justify-center mt-6 w-full">
-        {foodDetails.map((meal) => (
-          <FoodCard key={meal.idMeal} meal={meal} />
-        ))}
+        {loading ? (
+          <div className="flex flex-col items-center gap-4 py-20">
+            <div className="w-12 h-12 border-4 border-orange-200 border-t-orange-500 rounded-full animate-spin"></div>
+            <p className="text-xl cookie-light text-gray-500">Preparing something delicious...</p>
+          </div>
+        ) : (
+          <div className="flex justify-center w-full">
+            {foodDetails && foodDetails.map((meal) => (
+              <div key={meal.idMeal} className="w-full max-w-sm sm:max-w-md">
+                <FoodCard meal={meal} />
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
