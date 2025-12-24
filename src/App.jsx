@@ -6,7 +6,7 @@ import Warmglow from './components/Warmglow'
 
 const App = () => {
   return (
-    <div className='h-screen w-screen text-white bg-stone-950'>
+    <div className=' text-white bg-stone-950'>
       <Warmglow />
       <Navbar />
       <Routes>
