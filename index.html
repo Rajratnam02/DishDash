@@ -1,13 +1,183 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/src/assets/WhatsApp_Image_2025-09-14_at_22.39.23_5488428c-removebg-preview.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>DishDash</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DishDash | Savory Edit</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;700;800&family=Outfit:wght@900&display=swap" rel="stylesheet">
+    <style>
+        :root { --accent: #f59e0b; --fresh: #10b981; --balsamic: #0c0a09; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--balsamic); color: #fafaf9; scroll-behavior: smooth; }
+        .font-impact { font-family: 'Outfit', sans-serif; text-transform: uppercase; }
+        
+        /* The Spice: Appetizing Warmth Glow */
+        .warm-glow {
+            position: fixed; inset: 0; z-index: -1;
+            background: radial-gradient(circle at 50% -20%, rgba(245, 158, 11, 0.12) 0%, transparent 50%),
+                        radial-gradient(circle at 0% 100%, rgba(16, 185, 129, 0.05) 0%, transparent 40%);
+                        
+        }
+
+        .savory-card {
+            background: rgba(28, 25, 23, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .savory-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(245, 158, 11, 0.3);
+            box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.8);
+        }
+
+        .view-section { display: none; opacity: 0; transform: translateY(20px); }
+        .view-section.active { display: block; animation: reveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes reveal { to { opacity: 1; transform: translateY(0); } }
+
+        .video-wrap { position: relative; padding-bottom: 56.25%; height: 0; border-radius: 2.5rem; overflow: hidden; border: 1px solid rgba(245, 158, 11, 0.2); }
+        .video-wrap iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        
+        .timer-hud { background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); backdrop-blur: 10px; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="warm-glow"></div>
+
+    <nav class="fixed bottom-10 left-1/2 -translate-x-1/2 z-50">
+        <div class="bg-stone-900/80 backdrop-blur-2xl border border-white/5 rounded-full px-4 py-2 flex items-center gap-2 shadow-2xl">
+            <button onclick="showView('home')" class="bg-amber-500 text-stone-950 p-3 rounded-full hover:scale-110 transition shadow-lg shadow-amber-500/20">
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+            </button>
+            <span id="nav-label" class="text-stone-500 px-6 py-2 text-[10px] font-black uppercase tracking-[0.4em]">The Kitchen</span>
+        </div>
+    </nav>
+
+    <section id="home" class="view-section active pt-24 px-8 pb-40 max-w-7xl mx-auto">
+        <header class="mb-20">
+            <h1 class="font-impact text-7xl md:text-9xl tracking-tighter mb-4 italic leading-none">Dish<span class="text-amber-500">Dash</span></h1>
+            <p class="text-stone-500 text-xs font-bold uppercase tracking-[0.6em] ml-2">Flavor Intelligence • Est. 2025</p>
+        </header>
+
+        <div id="quick-pick" class="mb-24"></div>
+
+        <h2 class="font-impact text-3xl font-bold mb-10 tracking-tight flex items-center gap-6">
+            Pantry Categories <div class="h-[1px] flex-1 bg-stone-800"></div>
+        </h2>
+        <div id="category-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6"></div>
+    </section>
+
+    <section id="category-view" class="view-section pt-32 px-8 pb-40 max-w-7xl mx-auto">
+        <button onclick="showView('home')" class="text-amber-500 font-bold text-[10px] uppercase tracking-widest mb-6 flex items-center gap-2">← Back to Kitchen</button>
+        <h2 id="category-title" class="font-impact text-6xl md:text-8xl tracking-tighter mb-16 italic">Selection.</h2>
+        <div id="food-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+    </section>
+
+    <section id="recipe-view" class="view-section pt-32 px-8 pb-40 max-w-6xl mx-auto">
+        <div id="recipe-content"></div>
+    </section>
+
+    <script>
+        function showView(id) {
+            document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            window.scrollTo({top: 0, behavior: 'smooth'});
+            document.getElementById('nav-label').innerText = id.replace('-view', '').toUpperCase();
+        }
+
+        async function initHome() {
+            // Quick Pick
+            const pickRes = await fetch('https://www.themealdb.com/api/json/v1/1/random.php');
+            const pickData = await pickRes.json();
+            const meal = pickData.meals[0];
+            
+            document.getElementById('quick-pick').innerHTML = `
+                <div onclick="fetchRecipe('${meal.idMeal}')" class="savory-card rounded-[3.5rem] p-10 flex flex-col md:flex-row gap-12 items-center group cursor-pointer overflow-hidden">
+                    <div class="md:w-1/2">
+                        <span class="text-amber-500 font-bold text-[10px] uppercase tracking-[0.5em] mb-4 block">Recommended for you</span>
+                        <h2 class="font-impact text-5xl font-bold tracking-tight mb-8 leading-tight italic">${meal.strMeal}</h2>
+                        <div class="flex gap-4 text-[10px] font-bold uppercase tracking-widest text-stone-500">
+                            <span class="bg-stone-800 px-3 py-1 rounded">Origin: ${meal.strArea}</span>
+                            <span class="bg-stone-800 px-3 py-1 rounded">${meal.strCategory}</span>
+                        </div>
+                    </div>
+                    <div class="md:w-1/2 relative overflow-hidden rounded-[2.5rem] shadow-2xl">
+                        <img src="${meal.strMealThumb}" class="w-full h-80 object-cover group-hover:scale-110 transition duration-1000">
+                    </div>
+                </div>`;
+
+            // Categories
+            const catRes = await fetch('https://www.themealdb.com/api/json/v1/1/categories.php');
+            const catData = await catRes.json();
+            const grid = document.getElementById('category-grid');
+            grid.innerHTML = '';
+            catData.categories.forEach(cat => {
+                grid.innerHTML += `
+                    <div onclick="fetchCategoryList('${cat.strCategory}')" class="savory-card p-8 rounded-[3rem] text-center group cursor-pointer">
+                        <img src="${cat.strCategoryThumb}" class="w-full aspect-square object-contain group-hover:rotate-12 transition-transform duration-500 mb-4">
+                        <h3 class="text-[10px] font-bold uppercase tracking-[0.3em] text-stone-500 group-hover:text-amber-500 transition">${cat.strCategory}</h3>
+                    </div>`;
+            });
+        }
+
+        async function fetchCategoryList(cat) {
+            showView('category-view');
+            document.getElementById('category-title').innerHTML = `${cat} <span class="text-amber-500">Edit.</span>`;
+            const res = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?c=${cat}`);
+            const data = await res.json();
+            const grid = document.getElementById('food-grid');
+            grid.innerHTML = '';
+            data.meals.forEach(meal => {
+                grid.innerHTML += `
+                    <div onclick="fetchRecipe('${meal.idMeal}')" class="savory-card p-4 rounded-[3rem] group cursor-pointer">
+                        <img src="${meal.strMealThumb}" class="aspect-square rounded-[2.5rem] object-cover group-hover:scale-105 transition duration-700 mb-6">
+                        <h3 class="text-xl font-bold px-4 pb-6 font-impact italic">${meal.strMeal}</h3>
+                    </div>`;
+            });
+        }
+
+        async function fetchRecipe(id) {
+            showView('recipe-view');
+            const container = document.getElementById('recipe-content');
+            container.innerHTML = '<div class="text-center py-40 animate-pulse text-amber-500 text-xs font-bold tracking-widest uppercase">Harvesting Ingredients...</div>';
+
+            const res = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`);
+            const data = await res.json();
+            const meal = data.meals[0];
+
+            let ingredientsHTML = "";
+            for (let i = 1; i <= 20; i++) {
+                if (meal[`strIngredient${i}`]) {
+                    ingredientsHTML += `<div class="bg-stone-800/50 border border-white/5 px-6 py-4 rounded-2xl flex justify-between"><span class="text-sm font-bold">${meal[`strIngredient${i}`]}</span><span class="text-xs text-amber-500 font-bold uppercase">${meal[`strMeasure${i}`]}</span></div>`;
+                }
+            }
+
+            let videoHTML = "";
+            if(meal.strYoutube) {
+                const vidId = meal.strYoutube.split('v=')[1];
+                videoHTML = `<div class="mt-24"><h3 class="font-impact text-4xl font-bold mb-10 italic">Kitchen <span class="text-amber-500">Tutorial</span></h3><div class="video-wrap shadow-2xl"><iframe src="https://www.youtube.com/embed/${vidId}" frameborder="0" allowfullscreen></iframe></div></div>`;
+            }
+
+            container.innerHTML = `
+                <button onclick="history.back()" class="text-amber-500 font-bold text-[10px] uppercase tracking-widest mb-10 hover:underline">← Return to Collection</button>
+                <div class="grid lg:grid-cols-2 gap-20 mb-24 items-center">
+                    <img src="${meal.strMealThumb}" class="rounded-[4rem] h-[600px] w-full object-cover shadow-2xl border border-white/5">
+                    <div>
+                        <span class="text-amber-500 text-xs font-bold uppercase tracking-[0.5em] mb-4 block">${meal.strCategory}</span>
+                        <h1 class="font-impact text-7xl font-bold tracking-tighter mb-8 leading-tight italic">${meal.strMeal}</h1>
+                        <div class="grid grid-cols-1 gap-3 h-[300px] overflow-y-auto pr-4">${ingredientsHTML}</div>
+                    </div>
+                </div>
+                <div class="savory-card p-12 md:p-20 rounded-[4rem]">
+                    <h3 class="font-impact text-4xl font-bold mb-12 italic">The <span class="text-amber-500">Method.</span></h3>
+                    <p class="text-stone-400 leading-relaxed text-lg whitespace-pre-line">${meal.strInstructions}</p>
+                </div>
+                ${videoHTML}
+            `;
+        }
+
+        window.onload = initHome;
+    </script>
+</body>
 </html>
