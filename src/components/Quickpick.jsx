@@ -1,7 +1,9 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const Quickpick = () => {
+  const navigate = useNavigate()
   const [meal, setMeal] = useState(null)
 
   const fetchMeal = async () => {
@@ -16,6 +18,7 @@ const Quickpick = () => {
   }
 
   useEffect(() => {
+    setMeal(null)
     fetchMeal()
   }, [])
 
@@ -29,7 +32,7 @@ const Quickpick = () => {
 
   return (
     <div className="mb-24">
-      <div className="savory-card rounded-[3.5rem] p-10 flex flex-col md:flex-row gap-12 items-center group cursor-pointer overflow-hidden">
+      <div onClick={()=>{navigate(`/recipe/${meal.idMeal}`)}} className="savory-card rounded-[3.5rem] p-10 flex flex-col md:flex-row gap-12 items-center group cursor-pointer overflow-hidden">
         
         <div className="md:w-1/2">
           <span className="text-amber-500 font-bold text-[10px] uppercase tracking-[0.5em] mb-4 block">

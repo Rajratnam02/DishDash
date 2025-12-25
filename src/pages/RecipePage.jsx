@@ -1,13 +1,13 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import IngredientCard from "../components/IngredientCard";
 
 const RecipePage = () => {
   const { id } = useParams();
-
+  const navigate = useNavigate();
   const [meal, setMeal] = useState(null);
   const [ingredients, setIngredients] = useState([]);
 
@@ -48,9 +48,9 @@ const RecipePage = () => {
 
   return (
     <div className="pt-32 min-h-screen px-8 pb-40 max-w-6xl mx-auto">
-      <button className="text-amber-500 font-bold text-[10px] uppercase tracking-widest mb-10 hover:underline">
+      <div onClick={()=>(navigate(`/category/${meal.strCategory}`))} className="cursor-pointer text-amber-500 font-bold text-[10px] uppercase tracking-widest mb-10 ">
         ← Return to Collection
-      </button>
+      </div>
 
       <div className="grid lg:grid-cols-2 gap-20 mb-24 items-start">
         <img

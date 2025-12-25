@@ -34,9 +34,9 @@ const CategoryFoodPage = () => {
 
     return (
         <div className="bg-stone-950 min-h-screen pt-32 px-8 pb-40 max-w-7xl mx-auto">
-            <button onClick={()=>{navigate("/")}} className="text-amber-500 cursor-pointer font-bold text-[10px] uppercase tracking-widest mb-6 flex items-center gap-2">
+            <div onClick={()=>{navigate("/")}} className="text-amber-500 z-10 cursor-pointer font-bold text-[10px] uppercase tracking-widest mb-6 flex items-center gap-2">
                 ← Back to Kitchen
-            </button>
+            </div>
 
             <h2 className="outfit font-extrabold uppercase text-6xl md:text-8xl tracking-tighter mb-16 italic">
                 {id}
