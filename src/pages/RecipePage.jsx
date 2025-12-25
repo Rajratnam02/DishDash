@@ -4,12 +4,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import IngredientCard from "../components/IngredientCard";
+import VideoComponent from "../components/VideoComponent";
 
 const RecipePage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [meal, setMeal] = useState(null);
   const [ingredients, setIngredients] = useState([]);
+  const [vidId, setVidId] = useState(null)
 
   useEffect(() => {
     const fetchMeal = async () => {
@@ -26,6 +28,10 @@ const RecipePage = () => {
         const measure = fetchedMeal[`strMeasure${i}`];
         if (!name) break;
         list.push({ name, measure });
+      }
+
+      if (fetchedMeal.strYoutube) {
+        setVidId(fetchedMeal.strYoutube.split("=")[1])
       }
 
       setIngredients(list);
@@ -86,6 +92,7 @@ const RecipePage = () => {
           {meal.strInstructions}
         </p>
       </div>
+      {vidId && <VideoComponent vidId={vidId}/> }
     </div>
   );
 };
