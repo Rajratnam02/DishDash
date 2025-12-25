@@ -44,6 +44,7 @@ https://rajratnam02.github.io/DishDash
 
 
 
+```bash
 src/
 │── components/
 │ ├── CategoryFoodCard.jsx
@@ -60,6 +61,7 @@ src/
 │── main.jsx
 │── index.css
 
+```
 
 ---
 
@@ -80,64 +82,47 @@ npm install
 Start development server:
 
 npm run dev
+```
 
-🌍 API Used
-
+## 🌍 API Used
 TheMealDB
-
 Random meals
-
 Categories
-
 Recipe details
 🔗 https://www.themealdb.com/api.php
 
-🚢 Deployment (GitHub Pages)
+## 🚢 Deployment (GitHub Pages)
 
 This project is deployed using GitHub Pages.
-
 npm run deploy
 
-
 Make sure:
-
 homepage is set correctly in package.json
-
 base is set in vite.config.js
 
 HashRouter is used for routing
 
-🧠 Key Learnings
+## 🧠 Key Learnings
 
-Handling SPA routing on GitHub Pages
+- Handling SPA routing on GitHub Pages
+- Managing pointer events with layered UI
+- Building smooth scrolling components
+- Creating modern UI with Tailwind CSS
+- API-driven frontend architecture
 
-Managing pointer events with layered UI
+## 📌 Future Improvements
 
-Building smooth scrolling components
+- 🔍 Search recipes
+- ❤️ Favorites system
+- 🛒 Shopping list
+- 🌙 Dark / Light mode toggle
+- 🔐 User authentication
 
-Creating modern UI with Tailwind CSS
-
-API-driven frontend architecture
-
-📌 Future Improvements
-
-🔍 Search recipes
-
-❤️ Favorites system
-
-🛒 Shopping list
-
-🌙 Dark / Light mode toggle
-
-🔐 User authentication
-
-👨‍💻 Author
-
-Raj Ratnam
+##👨‍💻 Author
+**Raj Ratnam**
 GitHub: https://github.com/Rajratnam02
 
-⭐ Support
-
+##⭐ Support
 If you like this project, consider giving it a ⭐ on GitHub!
 
 
