@@ -36,7 +36,7 @@ const Quickpick = () => {
             Recommended for you
           </span>
 
-          <h2 className="font-impact text-5xl font-bold tracking-tight mb-8 leading-tight italic">
+          <h2 className="outfit text-5xl font-bold tracking-tight mb-8 leading-tight italic">
             {meal.strMeal}
           </h2>
 

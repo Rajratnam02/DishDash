@@ -7,7 +7,7 @@ const CategoryFoodPage = () => {
     const { id } = useParams();
     const [foods, setFoods] = useState(null);
     const navigate = useNavigate()
-
+    
     const fetchFoods = async () => {
         try {
             const response = await axios.get(
