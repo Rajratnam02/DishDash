@@ -2,11 +2,12 @@
 @import "tailwindcss";
 
 
-.outfit-400{
-    font-family: "Outfit", sans-serif;
-    font-weight: 800;
-    font-style: italic;
+.outfit{
+    font-family: "Outfit", sans-serif;   
 }
+
+
+
 
 .savory-card{
     background: rgba(28, 25, 23, 0.6);
