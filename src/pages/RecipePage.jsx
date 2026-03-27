@@ -11,12 +11,12 @@ const RecipePage = () => {
   const navigate = useNavigate();
   const [meal, setMeal] = useState(null);
   const [ingredients, setIngredients] = useState([]);
-  const [vidId, setVidId] = useState(null)
+  const [vidId, setVidId] = useState(null);
 
   useEffect(() => {
     const fetchMeal = async () => {
       const response = await axios.get(
-        `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`
+        `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`,
       );
 
       const fetchedMeal = response.data.meals[0];
@@ -31,7 +31,7 @@ const RecipePage = () => {
       }
 
       if (fetchedMeal.strYoutube) {
-        setVidId(fetchedMeal.strYoutube.split("=")[1])
+        setVidId(fetchedMeal.strYoutube.split("=")[1]);
       }
 
       setIngredients(list);
@@ -54,7 +54,10 @@ const RecipePage = () => {
 
   return (
     <div className="pt-32 min-h-screen px-8 pb-40 max-w-6xl mx-auto">
-      <div onClick={()=>(navigate(`/category/${meal.strCategory}`))} className="cursor-pointer text-amber-500 font-bold text-[10px] uppercase tracking-widest mb-10 ">
+      <div
+        onClick={() => navigate(`/category/${meal.strCategory}`)}
+        className="cursor-pointer text-amber-500 font-bold text-[10px] uppercase tracking-widest mb-10 "
+      >
         ← Return to Collection
       </div>
 
@@ -92,7 +95,7 @@ const RecipePage = () => {
           {meal.strInstructions}
         </p>
       </div>
-      {vidId && <VideoComponent vidId={vidId}/> }
+      {vidId && <VideoComponent vidId={vidId} />}
     </div>
   );
 };

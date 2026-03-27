@@ -1,23 +1,21 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap");
 @import "tailwindcss";
 
-
-.outfit{
-    font-family: "Outfit", sans-serif;   
+.outfit {
+  font-family: "Outfit", sans-serif;
 }
 
 .savory-card:hover {
-    transform: translateY(-8px);
-    border-color: rgba(245, 158, 11, 0.3);
-    box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.8);
+  transform: translateY(-8px);
+  border-color: rgba(245, 158, 11, 0.3);
+  box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.8);
 }
 
-
-.savory-card{
-    background: rgba(28, 25, 23, 0.6);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.03);
-    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+.savory-card {
+  background: rgba(28, 25, 23, 0.6);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .video-wrap {

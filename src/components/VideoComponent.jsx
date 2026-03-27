@@ -1,7 +1,7 @@
-import React from 'react'
+import React from "react";
 
 const VideoComponent = (props) => {
-  const vidLink = `https://www.youtube.com/embed/${props.vidId}`
+  const vidLink = `https://www.youtube.com/embed/${props.vidId}`;
 
   return (
     <div className="mt-24">
@@ -10,14 +10,10 @@ const VideoComponent = (props) => {
       </h3>
 
       <div className="video-wrap shadow-2xl">
-        <iframe
-          src={vidLink}
-          frameBorder="0"
-          allowFullScreen
-        ></iframe>
+        <iframe src={vidLink} frameBorder="0" allowFullScreen></iframe>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default VideoComponent
+export default VideoComponent;

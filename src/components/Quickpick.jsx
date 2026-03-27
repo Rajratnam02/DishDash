@@ -1,39 +1,43 @@
-import axios from 'axios'
-import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Quickpick = () => {
-  const navigate = useNavigate()
-  const [meal, setMeal] = useState(null)
+  const navigate = useNavigate();
+  const [meal, setMeal] = useState(null);
 
   const fetchMeal = async () => {
     try {
       const response = await axios.get(
-        'https://www.themealdb.com/api/json/v1/1/random.php'
-      )
-      setMeal(response.data.meals[0])
+        "https://www.themealdb.com/api/json/v1/1/random.php",
+      );
+      setMeal(response.data.meals[0]);
     } catch (error) {
-      console.error('Failed to fetch meal', error)
+      console.error("Failed to fetch meal", error);
     }
-  }
+  };
 
   useEffect(() => {
-    setMeal(null)
-    fetchMeal()
-  }, [])
+    setMeal(null);
+    fetchMeal();
+  }, []);
 
   if (!meal) {
     return (
       <div className="mb-24 text-center text-amber-500 text-xs uppercase tracking-widest animate-pulse">
         Harvesting ingredients...
       </div>
-    )
+    );
   }
 
   return (
     <div className="mb-24">
-      <div onClick={()=>{navigate(`/recipe/${meal.idMeal}`)}} className="savory-card rounded-[3.5rem] p-10 flex flex-col md:flex-row gap-12 items-center group cursor-pointer overflow-hidden">
-        
+      <div
+        onClick={() => {
+          navigate(`/recipe/${meal.idMeal}`);
+        }}
+        className="savory-card rounded-[3.5rem] p-10 flex flex-col md:flex-row gap-12 items-center group cursor-pointer overflow-hidden"
+      >
         <div className="md:w-1/2">
           <span className="text-amber-500 font-bold text-[10px] uppercase tracking-[0.5em] mb-4 block">
             Recommended for you
@@ -60,10 +64,9 @@ const Quickpick = () => {
             className="w-full h-80 object-cover group-hover:scale-110 transition duration-1000"
           />
         </div>
-
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Quickpick
+export default Quickpick;
