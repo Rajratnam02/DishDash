@@ -1,45 +1,34 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import recipeStore from "../stateManagement/recipeStore";
+import VideoComponent from "../components/VideoComponent";
+import IngredientCard from "../components/IngredientCard";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import "react-perfect-scrollbar/dist/css/styles.css";
-import IngredientCard from "../components/IngredientCard";
-import VideoComponent from "../components/VideoComponent";
 
 const RecipePage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+
   const [meal, setMeal] = useState(null);
-  const [ingredients, setIngredients] = useState([]);
-  const [vidId, setVidId] = useState(null);
+
+  const getRecipe = recipeStore((state) => state.getRecipe);
+
+  const fetchRecipe = async () => {
+    try {
+      const response = await getRecipe(id);
+
+      if (response?.recipeDetail) {
+        setMeal(response.recipeDetail);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
-    const fetchMeal = async () => {
-      const response = await axios.get(
-        `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`,
-      );
-
-      const fetchedMeal = response.data.meals[0];
-      setMeal(fetchedMeal);
-
-      const list = [];
-      for (let i = 1; i <= 20; i++) {
-        const name = fetchedMeal[`strIngredient${i}`];
-        const measure = fetchedMeal[`strMeasure${i}`];
-        if (!name) break;
-        list.push({ name, measure });
-      }
-
-      if (fetchedMeal.strYoutube) {
-        setVidId(fetchedMeal.strYoutube.split("=")[1]);
-      }
-
-      setIngredients(list);
-    };
-
     setMeal(null);
-    setIngredients([]);
-    fetchMeal();
+    fetchRecipe();
   }, [id]);
 
   if (!meal) {
@@ -55,31 +44,33 @@ const RecipePage = () => {
   return (
     <div className="pt-32 min-h-screen px-8 pb-40 max-w-6xl mx-auto">
       <div
-        onClick={() => navigate(`/category/${meal.strCategory}`)}
-        className="cursor-pointer text-amber-500 font-bold text-[10px] uppercase tracking-widest mb-10 "
+        onClick={() =>
+          navigate(`/category/${encodeURIComponent(meal.cuisine)}`)
+        }
+        className="cursor-pointer text-amber-500 font-bold text-[10px] uppercase tracking-widest mb-10"
       >
         ← Return to Collection
       </div>
 
       <div className="grid lg:grid-cols-2 gap-20 mb-24 items-start">
         <img
-          src={meal.strMealThumb}
-          alt={meal.strMeal}
-          className="rounded-[4rem] h-[600px] w-full object-cover shadow-2xl border border-white/5"
+          src={meal.image || "/fallback.jpg"}
+          alt={meal.name}
+          className="rounded-[4rem] h-150 w-full object-cover shadow-2xl border border-white/5"
         />
 
         <div>
           <span className="text-amber-500 text-xs font-bold uppercase tracking-[0.5em] mb-4 block">
-            {meal.strCategory}
+            {meal.category}
           </span>
 
-          <h1 className="outfit text-7xl font-bold tracking-tighter mb-8 leading-tight italic">
-            {meal.strMeal}
+          <h1 className="outfit text-5xl md:text-7xl font-bold tracking-tighter mb-8 leading-tight italic">
+            {meal.name}
           </h1>
 
-          <div className="grid grid-cols-1 h-[300px]  pr-4">
+          <div className="grid grid-cols-1 h-75 pr-4">
             <PerfectScrollbar options={{ suppressScrollX: true }}>
-              {ingredients.map((ing, index) => (
+              {meal.ingredients?.map((ing, index) => (
                 <IngredientCard key={index} ing={ing} />
               ))}
             </PerfectScrollbar>
@@ -91,11 +82,17 @@ const RecipePage = () => {
         <h3 className="outfit text-4xl font-bold mb-12 italic">
           The <span className="text-amber-500">Method.</span>
         </h3>
-        <p className="text-stone-400 leading-relaxed text-lg whitespace-pre-line">
-          {meal.strInstructions}
-        </p>
+
+        <ul className="text-stone-400 leading-relaxed  text-lg space-y-4">
+          {meal.instructions?.map((step, index) => (
+            <li className="">
+              {index + 1}. {step}
+            </li>
+          ))}
+        </ul>
       </div>
-      {vidId && <VideoComponent vidId={vidId} />}
+
+      {meal.youtube && <VideoComponent url={meal.youtube} />}
     </div>
   );
 };

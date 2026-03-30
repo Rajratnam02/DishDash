@@ -1,29 +1,25 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import CategoryList from "./CategoryList";
+import recipeStore from "../stateManagement/recipeStore";
 
 const Categories = () => {
   const [categories, setCategories] = useState(null);
+
   useEffect(() => {
     fetchCategories();
   }, []);
 
+  const getCuisine = recipeStore((state) => state.getCuisine);
+
   const fetchCategories = async () => {
     try {
-      const response = await axios.get(
-        "https://www.themealdb.com/api/json/v1/1/categories.php",
-      );
-      setCategories(response.data.categories);
+      const response = await getCuisine();
+      console.log(response);
+      setCategories(response.cuisines);
     } catch (error) {
       console.error("Failed to fetch categories", error);
     }
   };
-    var filtered = categories;  
-  if(categories){
-    filtered = categories.filter((cat) => (
-        cat.strCategory !== 'Beef'
-    ))
-  }
 
   if (!categories) {
     return <div>Loading...</div>;
@@ -36,7 +32,7 @@ const Categories = () => {
       </h2>
       <div className="h-px flex-1 mb-5  bg-stone-800"></div>
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
-        {filtered.map((cat) => (
+        {categories.map((cat) => (
           <CategoryList key={cat.idCategory} cat={cat} />
         ))}
       </div>

@@ -1,19 +1,27 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const CategoryFoodCard = (props) => {
+const CategoryFoodCard = ({ meal }) => {
   const navigate = useNavigate();
+
+  if (!meal) return null;
+
   return (
     <div
-      onClick={() => navigate(`/recipe/${props.meal.idMeal}`)}
-      className="savory-card p-4 rounded-[3rem] group cursor-pointer"
+      onClick={() => navigate(`/recipe/${meal.recipeNo}`)}
+      className="savory-card p-4 rounded-4xl group cursor-pointer hover:shadow-xl transition duration-300 bg-white"
     >
-      <img
-        src={props.meal.strMealThumb}
-        className="aspect-square rounded-[2.5rem] object-cover group-hover:scale-105 transition duration-700 mb-6"
-      />
-      <h3 className="text-xl font-bold px-4 pb-6 outfit italic">
-        {props.meal.strMeal}
+      <div className="w-full h-56 md:h-64 lg:h-72 overflow-hidden rounded-3xl">
+        <img
+          src={meal.image}
+          alt={meal.name}
+          className="w-full h-full object-cover 
+               group-hover:scale-110 transition duration-500"
+        />
+      </div>
+
+      <h3 className="text-lg md:text-xl font-semibold mt-4 px-2 pb-2 outfit italic line-clamp-2">
+        {meal.name}
       </h3>
     </div>
   );

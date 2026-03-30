@@ -2,18 +2,19 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import CategoryFoodCard from "../components/CategoryFoodCard";
+import recipeStore from "../stateManagement/recipeStore";
 
 const CategoryFoodPage = () => {
   const { id } = useParams();
+  const cuisine = decodeURIComponent(id)
   const [foods, setFoods] = useState(null);
   const navigate = useNavigate();
-
+  const mealByCuisine = recipeStore((state) => state.mealByCuisine);
   const fetchFoods = async () => {
     try {
-      const response = await axios.get(
-        `https://www.themealdb.com/api/json/v1/1/filter.php?c=${id}`,
-      );
-      setFoods(response.data.meals);
+      const response = await mealByCuisine(cuisine);
+      console.log(response)
+      setFoods(response.recipes)
     } catch (error) {
       console.error("Failed to fetch foods", error);
     }
@@ -44,7 +45,7 @@ const CategoryFoodPage = () => {
       </div>
 
       <h2 className="outfit font-extrabold uppercase text-6xl md:text-8xl tracking-tighter mb-16 italic">
-        {id}
+        {cuisine}
       </h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
