@@ -10,7 +10,7 @@ const Homepage = () => {
           Dish<span className="text-amber-500">Dash</span>
         </h1>
         <p className="text-stone-500 text-xs font-bold uppercase tracking-[0.6em] ml-2">
-          Flavor Intelligence • Est. 2025
+          Explore • Cook • Enjoy
         </p>
       </div>
       <Quickpick />
